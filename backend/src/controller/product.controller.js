@@ -24,40 +24,42 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-    try {
-        const { name, description, price, category, stock } = req.body;
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
+  try {
+    const { name, description, price, category, stock, imageUrl } = req.body;
 
-        const product = await prisma.product.create({
-        data: {
-            name,
-            description,
-            price: Number(price),
-            category,
-            stock: Number(stock),
-            image,
-        },
+    // kalau ada file yang diupload → pakai file
+    // kalau tidak ada → cek apakah user mengisi link imageUrl
+    const image = req.file 
+      ? `/uploads/${req.file.filename}`
+      : imageUrl || null; 
+
+    const product = await prisma.product.create({
+      data: {
+        name,
+        description,
+        price: Number(price),
+        category,
+        stock: Number(stock),
+        image,
+      }
     });
 
     res.json(product);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
+
 
 
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const { name, description, price, category, stock, imageUrl } = req.body;
 
-    // req.body akan ada untuk text field, req.file untuk image
-    const { name, description, price, category, stock } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : undefined;
-
-    // Pastikan ada setidaknya satu field untuk diupdate
-    if (!name && !description && !price && !category && !stock && !image) {
-      return res.status(400).json({ message: "Tidak ada field untuk diupdate" });
-    }
+    const image = req.file 
+      ? `/uploads/${req.file.filename}`
+      : imageUrl || undefined;
 
     const product = await prisma.product.update({
       where: { id: Number(id) },
@@ -68,7 +70,7 @@ export const updateProduct = async (req, res) => {
         ...(category && { category }),
         ...(stock !== undefined && { stock: Number(stock) }),
         ...(image && { image }),
-      },
+      }
     });
 
     res.json({ message: "Produk berhasil diupdate", product });
@@ -76,6 +78,7 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const deleteProduct = async (req, res) => {
   try {
@@ -102,4 +105,4 @@ export const deleteProduct = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
-};
+}
