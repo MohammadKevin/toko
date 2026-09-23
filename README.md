@@ -18,9 +18,9 @@ A lightweight fullstack store management system featuring an Express.js & Prisma
 ---
 
 ## ✨ Key Features
-- ⚡ **Product inventory listing and stock levels monitor**: Product inventory listing and stock levels monitor
-- ⚡ **Order calculation and customer checkout handling**: Order calculation and customer checkout handling
-- ⚡ **Modular backend architecture with Prisma ORM**: Modular backend architecture with Prisma ORM
+- Product inventory listing and stock levels monitor
+- Order calculation and customer checkout handling
+- Modular backend architecture with Prisma ORM
 
 ---
 
